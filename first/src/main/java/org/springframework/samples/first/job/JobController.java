@@ -1,4 +1,4 @@
-package org.springframework.samples.first;
+package org.springframework.samples.first.job;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,8 +20,13 @@ public class JobController {
   }
 
   @PostMapping
-  public Job addJob(@RequestBody Job job) {
-    return jobService.addJob(job);
+  public ResponseEntity<String> addJob(@RequestBody Job job) {
+
+    boolean added = jobService.addJob(job);
+    if (added) {
+      return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    return new ResponseEntity<>("Company Not found", HttpStatus.BAD_REQUEST);
   }
 
   @GetMapping("/{id}")

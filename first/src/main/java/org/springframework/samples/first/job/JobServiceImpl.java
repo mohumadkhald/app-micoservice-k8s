@@ -1,7 +1,8 @@
-package org.springframework.samples.first;
+package org.springframework.samples.first.job;
 
+import org.springframework.samples.first.company.Company;
+import org.springframework.samples.first.company.CompanyRepository;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +11,11 @@ import java.util.Optional;
 public class JobServiceImpl implements JobService{
 
   private final JobRepository jobRepository;
+  private final CompanyRepository companyRepository;
 
-  public JobServiceImpl(JobRepository jobRepository) {
+  public JobServiceImpl(JobRepository jobRepository, CompanyRepository companyRepository) {
     this.jobRepository = jobRepository;
+    this.companyRepository = companyRepository;
   }
 
   @Override
@@ -21,9 +24,15 @@ public class JobServiceImpl implements JobService{
   }
 
   @Override
-  public Job addJob(Job job) {
-    jobRepository.save(job);
-    return job;
+  public boolean addJob(Job job) {
+    Long conpanyId = job.getCompany().getId();
+    Optional<Company> company = companyRepository.findById(conpanyId);
+    if (company.isPresent()) {
+      job.setCompany(company.get());
+      jobRepository.save(job);
+      return true;
+    }
+    return false;
   }
 
   @Override

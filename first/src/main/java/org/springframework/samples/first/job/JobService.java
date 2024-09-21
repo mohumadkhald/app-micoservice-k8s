@@ -1,11 +1,11 @@
-package org.springframework.samples.first;
+package org.springframework.samples.first.job;
 
 import java.util.List;
 
 public interface JobService {
   List<Job> findJobs();
 
-  Job addJob(Job job);
+  boolean addJob(Job job);
 
   Job findJob(long id);
 

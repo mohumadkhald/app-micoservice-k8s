@@ -1,4 +1,4 @@
-package org.springframework.samples.first;
+package org.springframework.samples.first.job;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
