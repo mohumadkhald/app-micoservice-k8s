@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class JobServiceImpl implements JobService{
   private final List<Job> jobs = new ArrayList<>();
-//  private Long nextId = 1L; // if not have entity with @id
+  private Long nextId = 1L; // if not have entity with @id
 
   @Override
   public List<Job> findJobs() {
@@ -18,7 +18,7 @@ public class JobServiceImpl implements JobService{
 
   @Override
   public Job addJob(Job job) {
-//    job.setId(nextId++); // if not have entity with @id
+    job.setId(nextId++); // if not have entity with @id
     jobs.add(job);
     return job;
   }
