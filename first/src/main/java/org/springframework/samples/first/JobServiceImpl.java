@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JobServiceImpl implements JobService{
@@ -32,18 +33,29 @@ public class JobServiceImpl implements JobService{
 
   @Override
   public boolean deleteJob(long id) {
-    jobRepository.deleteById(id);
-    return true;
+    Optional<Job> job = jobRepository.findById(id);
+    if (job.isPresent()) {
+      jobRepository.delete(job.get());
+      return true;
+    }
+    return false;
   }
 
   @Override
   public boolean updateJob(long id, Job updatedJob) {
 
-    Job job = jobRepository.findById(id).orElse(null);
-    if (job != null) {
+    Optional<Job> jobOptional = jobRepository.findById(id);
+    if (jobOptional.isPresent()) {
+      Job job = jobOptional.get();
       job.setMinSalary(updatedJob.getMinSalary());
       job.setMaxSalary(updatedJob.getMaxSalary());
+      job.setStatus(updatedJob.getStatus());
+      job.setTitle(updatedJob.getTitle());
+      job.setDescription(updatedJob.getDescription());
+      job.setLocation(updatedJob.getLocation());
+      jobRepository.save(job);
+      return true;
     }
-    return true;
+    return false;
   }
 }
