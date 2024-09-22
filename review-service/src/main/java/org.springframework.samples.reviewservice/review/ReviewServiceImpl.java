@@ -13,59 +13,35 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Override
   public List<Review> getAllReviews(Long companyId) {
-//    Optional<Company> optionalCompany = companyRepository.findById(companyId);
-//    if (optionalCompany.isPresent()) {
       return reviewRepository.findByCompanyId(companyId);
-//    }
-//    return null;
   }
 
   @Override
   public Review createReview(Review review, Long companyId) {
-//    Optional<Company> optionalCompany = companyRepository.findById(companyId);
-//    if (optionalCompany.isPresent()) {
-//      Company company = optionalCompany.get();
       review.setCompanyId(companyId);
       return reviewRepository.save(review);
-//    }
-//    return null;
   }
 
   @Override
-  public Review getReviewById(Long id, Long companyId) {
-    List<Review> reviews = getAllReviews(companyId);
-//    if (reviews != null) {
-//      for (Review review : reviews) {
-//        if (review.getId().equals(id)) {
-//          return review;
-//        }
-//      }
-//    }
+  public Review getReviewById(Long id) {
 
-    if (reviews != null) {
-      return reviews.stream().filter(r -> r.getId().equals(id)).findFirst().orElse(null);
-    }
-    return null;
+    return reviewRepository.findById(id).orElse(null);
   }
 
   @Override
-  public Review updateReviewById(Long id, Long companyId, Review newReview) {
-    List<Review> reviews = getAllReviews(companyId);
-    if (reviews != null) {
-      Review oldReview = reviews.stream().filter(r -> r.getId().equals(id)).findFirst().orElse(null);
-      if (oldReview != null) {
-        newReview.setId(oldReview.getId());
-        newReview.setCompanyId(oldReview.getCompanyId());
+  public Review updateReviewById(Long id, Review newReview) {
+    Review review = getReviewById(id);
+      if (review != null) {
+        newReview.setId(review.getId());
+        newReview.setCompanyId(review.getCompanyId());
         return reviewRepository.save(newReview);
       }
-    }
     return null;
   }
 
   @Override
-  public boolean deleteReviewById(Long id, Long companyId) {
-    List<Review> reviews = getAllReviews(companyId);
-    Review review = reviews.stream().filter(r -> r.getId().equals(id)).findFirst().orElse(null);
+  public boolean deleteReviewById(Long id) {
+    Review review = getReviewById(id);
       if (review != null) {
         reviewRepository.delete(review);
         return true;

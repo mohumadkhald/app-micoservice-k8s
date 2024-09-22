@@ -1,11 +1,16 @@
 package org.springframework.samples.jobservice.job;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.samples.jobservice.job.Job;
 import org.springframework.samples.jobservice.job.JobRepository;
 import org.springframework.samples.jobservice.job.JobService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -24,8 +29,17 @@ public class JobServiceImpl implements JobService {
 
   @Override
   public boolean addJob(Job job) {
-      jobRepository.save(job);
-      return true;
+    RestTemplate restTemplate = new RestTemplate();
+    Company[] companiesArray = restTemplate.getForObject("http://localhost:8082/companies", Company[].class);
+    Long companyId = job.getCompanyId();
+    assert companiesArray != null;
+    for (Company company : companiesArray) {
+      if (company.getId().equals(companyId)) {
+        jobRepository.save(job);
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override

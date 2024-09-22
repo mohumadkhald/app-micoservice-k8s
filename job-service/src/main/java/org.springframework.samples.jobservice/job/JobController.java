@@ -26,7 +26,7 @@ public class JobController {
     if (added) {
       return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    return new ResponseEntity<>("Company Not found", HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>("Company Not found", HttpStatus.NOT_FOUND);
   }
 
   @GetMapping("/{id}")
