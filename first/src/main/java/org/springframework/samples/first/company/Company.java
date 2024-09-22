@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.samples.first.job.Job;
+import org.springframework.samples.first.review.Review;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class Company {
   @OneToMany(mappedBy = "company")
   private List<Job> jobs;
 
-//  private List<Review> reviews;
+  @OneToMany(mappedBy = "company")
+  private List<Review> reviews;
 
 }
