@@ -15,7 +15,7 @@ public class JobController {
 
 //  @RequestMapping(value = "/jobs", method = RequestMethod.GET)
   @GetMapping
-  public List<Job> findJobs() {
+  public List<JobDto> findJobs() {
     return jobService.findJobs();
   }
 
@@ -30,8 +30,8 @@ public class JobController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Job> findJob(@PathVariable("id") long id) {
-    Job job = jobService.findJob(id);
+  public ResponseEntity<JobDto> findJob(@PathVariable("id") long id) {
+    JobDto job = jobService.findJob(id);
     if (job == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

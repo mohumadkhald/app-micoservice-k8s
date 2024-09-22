@@ -1,21 +1,17 @@
 package org.springframework.samples.jobservice.job;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.samples.jobservice.job.Job;
-import org.springframework.samples.jobservice.job.JobRepository;
-import org.springframework.samples.jobservice.job.JobService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class JobServiceImpl implements JobService {
 
+  private static final Logger log = LoggerFactory.getLogger(JobServiceImpl.class);
   private final JobRepository jobRepository;
 
   public JobServiceImpl(JobRepository jobRepository) {
@@ -23,8 +19,20 @@ public class JobServiceImpl implements JobService {
   }
 
   @Override
-  public List<Job> findJobs() {
-    return jobRepository.findAll();
+  public List<JobDto> findJobs() {
+    RestTemplate restTemplate = new RestTemplate();
+
+    // 1. Fetch all jobs
+    return jobRepository.findAll().stream()
+      .map(job -> {
+        // 2. Fetch the company for each job
+        String companyUrl = "http://localhost:8082/companies/" + job.getCompanyId();
+        Company company = restTemplate.getForObject(companyUrl, Company.class);
+
+        // 3. Map the Job and Company to JobDto
+        return JobMapper.toJobDto(job, company);
+      })
+      .toList();
   }
 
   @Override
@@ -43,8 +51,13 @@ public class JobServiceImpl implements JobService {
   }
 
   @Override
-  public Job findJob(long id) {
-   return jobRepository.findById(id).orElse(null);
+  public JobDto findJob(long id) {
+   Job job = jobRepository.findById(id).orElse(null);
+    RestTemplate restTemplate = new RestTemplate();
+    assert job != null;
+    String companyUrl = "http://localhost:8082/companies/" + job.getCompanyId();
+    Company company = restTemplate.getForObject(companyUrl, Company.class);
+   return JobMapper.toJobDto(job, company);
   }
 
   @Override
