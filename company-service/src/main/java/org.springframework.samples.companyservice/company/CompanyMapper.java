@@ -1,7 +1,5 @@
-package org.springframework.samples.companyservice;
+package org.springframework.samples.companyservice.company;
 
-import org.springframework.samples.companyservice.company.Company;
-import org.springframework.samples.companyservice.company.CompanyDto;
 import org.springframework.samples.companyservice.company.client.Review;
 
 import java.util.List;

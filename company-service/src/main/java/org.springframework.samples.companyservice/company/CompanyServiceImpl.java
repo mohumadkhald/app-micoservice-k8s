@@ -1,7 +1,6 @@
 package org.springframework.samples.companyservice.company;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.samples.companyservice.CompanyMapper;
 import org.springframework.samples.companyservice.company.client.Review;
 import org.springframework.samples.companyservice.company.client.ReviewClient;
 import org.springframework.stereotype.Service;
