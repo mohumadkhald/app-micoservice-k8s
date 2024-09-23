@@ -4,11 +4,11 @@ package org.springframework.samples.companyservice.company;
 import java.util.List;
 
 public interface CompanyService {
-  List<Company> findCompanies();
+  List<CompanyDto> findCompanies();
 
   Company addCompany(Company company);
 
-  Company findCompany(long id);
+  CompanyDto findCompany(long id);
 
   boolean deleteCompany(long id);
 

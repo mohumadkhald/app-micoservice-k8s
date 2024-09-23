@@ -15,7 +15,7 @@ public class CompanyController {
   private final CompanyService companyService;
 
   @GetMapping
-  public List<Company> findCompanies() {
+  public List<CompanyDto> findCompanies() {
     return companyService.findCompanies();
   }
 
@@ -25,12 +25,12 @@ public class CompanyController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Company> findCompany(@PathVariable("id") long id) {
-    Company company = companyService.findCompany(id);
+  public ResponseEntity<CompanyDto> findCompany(@PathVariable("id") long id) {
+    CompanyDto company = companyService.findCompany(id);
     if (company == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<>(company, HttpStatus.FOUND);
+    return new ResponseEntity<>(company, HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")

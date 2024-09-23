@@ -1,4 +1,4 @@
-package org.springframework.samples.jobservice.job;
+package org.springframework.samples.reviewservice.review.client;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;

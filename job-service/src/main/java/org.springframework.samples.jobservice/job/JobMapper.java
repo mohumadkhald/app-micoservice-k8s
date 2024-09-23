@@ -1,5 +1,7 @@
 package org.springframework.samples.jobservice.job;
 
+import org.springframework.samples.jobservice.job.client.Company;
+
 public interface JobMapper {
   public static JobDto toJobDto (final Job job, final Company company) {
     return JobDto.builder()

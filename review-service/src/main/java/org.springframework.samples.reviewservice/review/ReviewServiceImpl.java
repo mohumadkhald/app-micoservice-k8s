@@ -13,6 +13,7 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Override
   public List<Review> getAllReviews(Long companyId) {
+
       return reviewRepository.findByCompanyId(companyId);
   }
 

@@ -3,6 +3,7 @@ package org.springframework.samples.jobservice.job;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.samples.jobservice.job.client.Company;
 
 @Setter
 @Getter

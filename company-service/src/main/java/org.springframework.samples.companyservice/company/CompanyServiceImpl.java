@@ -1,9 +1,9 @@
 package org.springframework.samples.companyservice.company;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.samples.companyservice.company.Company;
-import org.springframework.samples.companyservice.company.CompanyRepository;
-import org.springframework.samples.companyservice.company.CompanyService;
+import org.springframework.samples.companyservice.CompanyMapper;
+import org.springframework.samples.companyservice.company.client.Review;
+import org.springframework.samples.companyservice.company.client.ReviewClient;
 import org.springframework.stereotype.Service;
 
 
@@ -15,11 +15,20 @@ import java.util.Optional;
 public class CompanyServiceImpl implements CompanyService {
 
   private final CompanyRepository companyRepository;
+  private final ReviewClient reviewClient;
 
 
   @Override
-  public List<Company> findCompanies() {
-    return companyRepository.findAll();
+  public List<CompanyDto> findCompanies() {
+    return companyRepository.findAll().stream()
+      .map(comp -> {
+        // 2. Fetch the company for each job
+        List<Review> reviews = reviewClient.getReviewCompanies(comp.getId());
+
+        // 3. Map the Job and Company to JobDto
+        return CompanyMapper.toCompanyDto(comp, reviews);
+      })
+      .toList();
   }
 
   @Override
@@ -28,8 +37,14 @@ public class CompanyServiceImpl implements CompanyService {
   }
 
   @Override
-  public Company findCompany(long id) {
-    return companyRepository.findById(id).orElse(null);
+  public CompanyDto findCompany(long id) {
+    Optional<Company> companyOptional = companyRepository.findById(id);
+    if (companyOptional.isPresent()) {
+      Company company = companyOptional.get();
+      List<Review> reviews = reviewClient.getReviewCompanies(company.getId());
+      return CompanyMapper.toCompanyDto(company, reviews);
+    }
+    return null;
   }
 
   @Override

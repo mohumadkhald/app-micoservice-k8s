@@ -1,5 +1,7 @@
 package org.springframework.samples.jobservice.job;
 
+import org.springframework.samples.jobservice.job.client.Company;
+import org.springframework.samples.jobservice.job.client.CompanyClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,10 +13,12 @@ public class JobServiceImpl implements JobService {
 
   private final JobRepository jobRepository;
   private final RestTemplate restTemplate;
+  private final CompanyClient companyClient;
 
-  public JobServiceImpl(JobRepository jobRepository, RestTemplate restTemplate) {
+  public JobServiceImpl(JobRepository jobRepository, RestTemplate restTemplate, CompanyClient companyClient) {
     this.jobRepository = jobRepository;
     this.restTemplate = restTemplate;
+    this.companyClient = companyClient;
   }
 
   @Override
@@ -23,8 +27,7 @@ public class JobServiceImpl implements JobService {
     return jobRepository.findAll().stream()
       .map(job -> {
         // 2. Fetch the company for each job
-        String companyUrl = "http://COMPANY-SERVICE:8082/companies/" + job.getCompanyId();
-        Company company = restTemplate.getForObject(companyUrl, Company.class);
+        Company company = companyClient.getCompanyById(job.getCompanyId());
 
         // 3. Map the Job and Company to JobDto
         return JobMapper.toJobDto(job, company);
@@ -34,7 +37,7 @@ public class JobServiceImpl implements JobService {
 
   @Override
   public boolean addJob(Job job) {
-    Company[] companiesArray = restTemplate.getForObject("http://COMPANY-SERVICE:8082/companies", Company[].class);
+    Company[] companiesArray = companyClient.getCompanies();
     Long companyId = job.getCompanyId();
     assert companiesArray != null;
     for (Company company : companiesArray) {
@@ -50,8 +53,7 @@ public class JobServiceImpl implements JobService {
   public JobDto findJob(long id) {
    Job job = jobRepository.findById(id).orElse(null);
     assert job != null;
-    String companyUrl = "http://COMPANY-SERVICE:8082/companies/" + job.getCompanyId();
-    Company company = restTemplate.getForObject(companyUrl, Company.class);
+    Company company = companyClient.getCompanyById(job.getCompanyId());
    return JobMapper.toJobDto(job, company);
   }
 
