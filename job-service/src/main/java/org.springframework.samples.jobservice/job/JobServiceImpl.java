@@ -51,10 +51,13 @@ public class JobServiceImpl implements JobService {
 
   @Override
   public JobDto findJob(long id) {
-   Job job = jobRepository.findById(id).orElse(null);
-    assert job != null;
-    Company company = companyClient.getCompanyById(job.getCompanyId());
-   return JobMapper.toJobDto(job, company);
+   Optional<Job> jobOptional = jobRepository.findById(id);
+   if (jobOptional.isPresent()) {
+     Job job = jobOptional.get();
+     Company company = companyClient.getCompanyById(job.getCompanyId());
+     return JobMapper.toJobDto(job, company);
+   }
+   return null;
   }
 
   @Override
