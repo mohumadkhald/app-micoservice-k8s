@@ -55,7 +55,6 @@
       <artifactId>spring-cloud-function-context</artifactId>
     </dependency>
 
-
   </dependencies>
 
   <build>
