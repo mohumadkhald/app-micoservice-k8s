@@ -4,6 +4,7 @@ package org.springframework.samples.reviewservice.review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.reviewservice.messaging.ReviewMessageProducer;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -14,6 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
   private final ReviewService reviewService;
+  private final ReviewMessageProducer reviewMessageProducer;
+
 
   @GetMapping
   public ResponseEntity<List<Review>> getReviews(@RequestParam("compId") Long companyId) {
@@ -34,6 +37,7 @@ public class ReviewController {
     if (review == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    reviewMessageProducer.sendMessage(review);
     return new ResponseEntity<>(review, HttpStatus.CREATED);
   }
 
@@ -62,6 +66,12 @@ public class ReviewController {
       return new ResponseEntity<>("the review deleted", HttpStatus.OK);
     }
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  }
+
+  @GetMapping("/avgRating")
+  public Double getAverageRating(@RequestParam("compId") Long companyId) {
+    List<Review> reviews = reviewService.getAllReviews(companyId);
+    return reviews.stream().mapToDouble(Review::getRating).average().orElse(0.0);
   }
 
 }

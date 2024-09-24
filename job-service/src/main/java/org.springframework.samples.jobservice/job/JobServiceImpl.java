@@ -1,5 +1,8 @@
 package org.springframework.samples.jobservice.job;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.samples.jobservice.job.client.Company;
 import org.springframework.samples.jobservice.job.client.CompanyClient;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,9 @@ public class JobServiceImpl implements JobService {
   }
 
   @Override
+//  @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
+//  @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
+  @RateLimiter(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
   public List<JobDto> findJobs() {
     // 1. Fetch all jobs
     return jobRepository.findAll().stream()
@@ -35,13 +41,18 @@ public class JobServiceImpl implements JobService {
       .toList();
   }
 
+  public List<String> companyBreakerFallback(Exception e) {
+    List<String> list = new ArrayList<>();
+    list.add("Down");
+    return list;
+  }
+
   @Override
   public boolean addJob(Job job) {
-    Company[] companiesArray = companyClient.getCompanies();
+    List<Company> companies = companyClient.getCompanies();
     Long companyId = job.getCompanyId();
-    assert companiesArray != null;
-    for (Company company : companiesArray) {
-      if (company.getId().equals(companyId)) {
+    for (Company company : companies) {
+      if (companyId.equals(company.getId())) {
         jobRepository.save(job);
         return true;
       }

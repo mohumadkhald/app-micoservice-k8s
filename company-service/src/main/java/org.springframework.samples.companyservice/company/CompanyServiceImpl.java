@@ -1,8 +1,10 @@
 package org.springframework.samples.companyservice.company;
 
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.samples.companyservice.company.client.Review;
 import org.springframework.samples.companyservice.company.client.ReviewClient;
+import org.springframework.samples.companyservice.messaging.ReviewMessage;
 import org.springframework.stereotype.Service;
 
 
@@ -32,6 +34,7 @@ public class CompanyServiceImpl implements CompanyService {
 
   @Override
   public Company addCompany(Company company) {
+    company.setRating(0.0);
     return companyRepository.save(company);
   }
 
@@ -67,5 +70,15 @@ public class CompanyServiceImpl implements CompanyService {
       return true;
     }
     return false;
+  }
+
+  @Override
+  public void updateCompanyRating(ReviewMessage reviewMessage) {
+    System.out.println(reviewMessage.getDescription());
+    Company company = companyRepository.findById(reviewMessage.getCompanyId())
+      .orElseThrow(() -> new NotFoundException("Company not found" + reviewMessage.getCompanyId()));
+    double avgRating = reviewClient.getAverageRating(reviewMessage.getCompanyId());
+    company.setRating(avgRating);
+    companyRepository.save(company);
   }
 }

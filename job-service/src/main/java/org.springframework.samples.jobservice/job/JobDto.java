@@ -16,6 +16,5 @@ public class JobDto {
   private Double maxSalary;
   private String location;
   private String status;
-
   private Company company;
 }

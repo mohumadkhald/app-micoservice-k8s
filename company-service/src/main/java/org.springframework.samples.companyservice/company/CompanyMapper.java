@@ -10,6 +10,7 @@ public interface CompanyMapper {
       .id(company.getId())
       .name(company.getName())
       .description(company.getDescription())
+      .rating(company.getRating())
       .reviews(reviews)
       .build();
   }

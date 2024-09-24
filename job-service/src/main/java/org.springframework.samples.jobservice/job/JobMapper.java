@@ -13,6 +13,7 @@ public interface JobMapper {
       .id(job.getId())
       .location(job.getLocation())
       .status(job.getStatus())
+
       .build();
   }
 }

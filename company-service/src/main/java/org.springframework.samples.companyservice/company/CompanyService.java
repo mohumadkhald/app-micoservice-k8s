@@ -1,6 +1,8 @@
 package org.springframework.samples.companyservice.company;
 
 
+import org.springframework.samples.companyservice.messaging.ReviewMessage;
+
 import java.util.List;
 
 public interface CompanyService {
@@ -13,4 +15,6 @@ public interface CompanyService {
   boolean deleteCompany(long id);
 
   boolean updateCompany(long id, Company updatedCompany);
+
+    void updateCompanyRating(ReviewMessage reviewMessage);
 }

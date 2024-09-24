@@ -15,4 +15,7 @@ public interface ReviewClient {
 
   @GetMapping("reviews")
   List<Review> getReviewCompanies(@RequestParam Long compId);
+
+  @GetMapping("/reviews/avgRating")
+  Double getAverageRating(@RequestParam Long compId);
 }
