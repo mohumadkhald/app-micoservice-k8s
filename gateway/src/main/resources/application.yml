@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: api-gateway
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888/}
+  cloud:
+    gateway:
+      routes:
+        - id: job-service
+          uri: lb://job-service
+          predicates:
+            - Path=/jobs/**
+        - id: company-service
+          uri: lb://company-service
+          predicates:
+            - Path=/companies/**
+        - id: review-service
+          uri: lb://review-service
+          predicates:
+            - Path=/reviews/**
+        - id: discovery-server
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/web
+          filters:
+            - SetPath=/
+        - id: discovery-server-static
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/**
+
+eureka:
+  instance:
+    # enable to register multiple app instances with a random server port
+    instance-id: ${spring.application.name}:${random.uuid}
+  client:
+    serviceUrl:
+      defaultZone: http://admin:123456Ax@localhost:8761/eureka
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+    import: configserver:http://config-server:8888
+  cloud:
+    gateway:
+      routes:
+        - id: job-service
+          uri: lb://job-service
+          predicates:
+            - Path=/jobs/**
+        - id: company-service
+          uri: lb://company-service
+          predicates:
+            - Path=/companies/**
+        - id: review-service
+          uri: lb://review-service
+          predicates:
+            - Path=/reviews/**
+        - id: discovery-server
+          uri: http://admin:123456Ax@discovery-server:8761
+          predicates:
+            - Path=/eureka/web
+          filters:
+            - SetPath=/
+        - id: discovery-server-static
+          uri: http://admin:123456Ax@discovery-server:8761
+          predicates:
+            - Path=/eureka/**

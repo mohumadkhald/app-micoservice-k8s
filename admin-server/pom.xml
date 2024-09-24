@@ -60,6 +60,7 @@
       <artifactId>jolokia-core</artifactId>
     </dependency>
 
+
   </dependencies>
 
   <build>

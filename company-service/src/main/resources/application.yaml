@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: company-service
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888/}
+  profiles:
+    active: postgres-local
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://admin:123456Ax@dlocalhost:8761/eureka/
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+    import: configserver:http://config-server:8888
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
