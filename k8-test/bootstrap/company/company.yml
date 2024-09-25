@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: company
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 20%
+  selector:
+    matchLabels:
+      app: company
+  template:
+    metadata:
+      labels:
+        app: company
+    spec:
+      containers:
+      - name: company
+        image: mohumadkhald/company-service
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+          requests:
+            memory: "500Mi"
+            cpu: "250m"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8082
+        # xx
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: k8s
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: company
+spec:
+  selector:
+    app: company
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8082
+  type: LoadBalancer
+
+
+
+        # xx
+        # livenessProbe:
+        #   httpGet:
+        #     path: /health
+        #     port: 8081
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 5
+        #   timeoutSeconds: 3  

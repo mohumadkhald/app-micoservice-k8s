@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 20%
+  selector:
+    matchLabels:
+      app: job
+  template:
+    metadata:
+      labels:
+        app: job
+    spec:
+      containers:
+      - name: job
+        image: mohumadkhald/job-service
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+          requests:
+            memory: "500Mi"
+            cpu: "250m"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+        # xx
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: k8s
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: job
+spec:
+  selector:
+    app: job
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8081
+  type: LoadBalancer
+
+
+
+        # xx
+        # livenessProbe:
+        #   httpGet:
+        #     path: /health
+        #     port: 8081
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 5
+        #   timeoutSeconds: 3  
