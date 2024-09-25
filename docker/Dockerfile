@@ -22,3 +22,20 @@ COPY --from=builder application/snapshot-dependencies/ ./
 RUN true
 COPY --from=builder application/application/ ./
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+
+
+
+
+
+
+
+
+
+#docker push ${REPOSITORY_PREFIX}/config-server
+#docker push ${REPOSITORY_PREFIX}/service-registry
+#docker push ${REPOSITORY_PREFIX}/gateway
+#docker push ${REPOSITORY_PREFIX}/job-service
+#docker push ${REPOSITORY_PREFIX}/review-service
+#docker push ${REPOSITORY_PREFIX}/company-service
+#docker push ${REPOSITORY_PREFIX}/admin-server
+
