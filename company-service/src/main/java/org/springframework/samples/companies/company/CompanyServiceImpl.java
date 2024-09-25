@@ -24,13 +24,11 @@ public class CompanyServiceImpl implements CompanyService {
   @Override
   public List<CompanyDto> findCompanies() {
     List<Company> companies =  companyRepository.findAll();
-    List<CompanyDto> companiesDto = new ArrayList<>();
     return companies.stream().map(this::convertToDto).collect(Collectors.toList());
   }
 
   private CompanyDto convertToDto(Company company) {
     List<Review> reviews = reviewClient.getReviewCompanies(company.getId());
-
     return CompanyMapper.
       toCompanyDto(company,reviews);
   }
