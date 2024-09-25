@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: company
-        image: mohumadkhald/company-service:2.2
+        image: mohumadkhald/company-service
         resources:
           limits:
             memory: "1Gi"
@@ -58,4 +58,4 @@ spec:
         #     port: 8081
         #   initialDelaySeconds: 5
         #   periodSeconds: 5
-        #   timeoutSeconds: 3  
+        #   timeoutSeconds: 3

@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: review
-        image: mohumadkhald/review-service:2.0
+        image: mohumadkhald/review-service
         resources:
           limits:
             memory: "1Gi"
@@ -58,4 +58,4 @@ spec:
         #     port: 8081
         #   initialDelaySeconds: 5
         #   periodSeconds: 5
-        #   timeoutSeconds: 3  
+        #   timeoutSeconds: 3
