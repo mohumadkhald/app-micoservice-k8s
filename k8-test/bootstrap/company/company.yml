@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: company
-        image: mohumadkhald/company-service
+        image: mohumadkhald/company-service:2.0
         resources:
           limits:
             memory: "1Gi"

@@ -21,3 +21,4 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 80
+# kubectl set image deployment/nginx nginx-container=nginx:1.9.1

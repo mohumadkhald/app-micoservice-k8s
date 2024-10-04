@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: job
-        image: mohumadkhald/job-service
+        image: mohumadkhald/job-service:2.0
         resources:
           limits:
             memory: "1Gi"
