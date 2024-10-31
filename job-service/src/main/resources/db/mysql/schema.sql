@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS app;
 GRANT ALL PRIVILEGES ON app.* TO pc@localhost IDENTIFIED BY 'pc';
 
 USE app;
-
+Drop TABLE IF EXISTS jobs;
 CREATE TABLE IF NOT EXISTS jobs (
                                   id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                   title VARCHAR(255) NOT NULL,

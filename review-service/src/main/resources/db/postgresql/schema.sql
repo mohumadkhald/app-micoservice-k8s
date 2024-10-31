@@ -1,4 +1,6 @@
 
+Drop TABLE IF EXISTS reviews;
+
 CREATE TABLE IF NOT EXISTS reviews (
                        id SERIAL PRIMARY KEY,
                        title VARCHAR(255) NOT NULL,

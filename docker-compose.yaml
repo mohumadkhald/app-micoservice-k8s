@@ -44,12 +44,14 @@ services:
         limits:
           memory: 512M
     depends_on:
-      config-server:
-        condition: service_healthy
+      - config-server
+      - mydb-mariadb
     environment:
       - SPRING_PROFILES_ACTIVE=docker,mysql
     ports:
       - 8081:8081
+    restart: always
+
 
   company-service:
     image: mohumadkhald/company-service
@@ -160,6 +162,8 @@ services:
       - mydb-data:/var/lib/mysql
     ports:
       - "3306:3306"
+    restart: always
+
 
 
   phpmyadmin:
@@ -174,7 +178,6 @@ services:
       - "8000:80"
     depends_on:
       - mydb-mariadb
-      - tracing-server
 
   # PostgreSQL container configuration
   postgres:
@@ -183,7 +186,7 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: mydb
+      POSTGRES_DB: app
     ports:
       - "5432:5432"
     volumes:

@@ -1,3 +1,5 @@
+Drop TABLE IF EXISTS companies;
+
 -- Create the companies table if it doesn't exist
 CREATE TABLE IF NOT EXISTS companies (
                                        id SERIAL PRIMARY KEY,
